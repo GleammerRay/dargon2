@@ -29,6 +29,14 @@ class DartLibLoader implements LibLoader {
   /// and the binary's relative path
   @override
   String getPath() {
+    // Check if is already compiled and use an included library if so
+    File resolvedExe = File(Platform.resolvedExecutable);
+    if (!resolvedExe.path.split(Platform.pathSeparator).last.contains('dart')) {
+      Directory resolvedDir = resolvedExe.parent;
+      if (Platform.isMacOS) return '${resolvedDir.path}/lib/libargon2.dylib';
+      if (Platform.isLinux) return '${resolvedDir.path}/lib/libargon2.so';
+      if (Platform.isWindows) return '${resolvedDir.path}\\libargon2.dll';
+    }
     final rootLibrary = 'package:dargon2/dargon2.dart';
     // ignore: deprecated_member_use
     var rootPath = waitFor(Isolate.resolvePackageUri(Uri.parse(rootLibrary)))!
