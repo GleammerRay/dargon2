@@ -35,7 +35,7 @@ class DartLibLoader implements LibLoader {
       Directory resolvedDir = resolvedExe.parent;
       if (Platform.isMacOS) return '${resolvedDir.path}/lib/libargon2.dylib';
       if (Platform.isLinux) return '${resolvedDir.path}/lib/libargon2.so';
-      if (Platform.isWindows) return '${resolvedDir.path}\\libargon2.dll';
+      if (Platform.isWindows) return '${resolvedDir.path}\\argon2.dll';
     }
     final rootLibrary = 'package:dargon2/dargon2.dart';
     // ignore: deprecated_member_use
