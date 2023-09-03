@@ -8,8 +8,6 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dargon2_core/dargon2_core.dart';
-// ignore: deprecated_member_use
-import 'dart:cli';
 
 /// The Dylib Loader for any Dart native apps, regardless of platform. Loads the dylib
 /// from the given path, based off a conditional import on dart:ui
@@ -38,8 +36,14 @@ class DartLibLoader implements LibLoader {
       if (Platform.isWindows) return '${resolvedDir.path}\\argon2.dll';
     }
     final rootLibrary = 'package:dargon2/dargon2.dart';
+    Uri? packageURI;
+    Isolate.resolvePackageUri(Uri.parse(rootLibrary))
+        .then((value) => packageURI = value);
+    while (packageURI == null) {
+      sleep(Duration(milliseconds: 10));
+    }
     // ignore: deprecated_member_use
-    var rootPath = waitFor(Isolate.resolvePackageUri(Uri.parse(rootLibrary)))!
+    var rootPath = packageURI!
         .resolve('src/blobs/')
         .toFilePath(windows: Platform.isWindows);
     if (Platform.isMacOS) return '${rootPath}libargon2-darwin.dylib';
