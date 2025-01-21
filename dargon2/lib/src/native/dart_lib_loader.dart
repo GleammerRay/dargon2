@@ -36,12 +36,7 @@ class DartLibLoader implements LibLoader {
       if (Platform.isWindows) return '${resolvedDir.path}\\argon2.dll';
     }
     final rootLibrary = 'package:dargon2/dargon2.dart';
-    Uri? packageURI;
-    Isolate.resolvePackageUri(Uri.parse(rootLibrary))
-        .then((value) => packageURI = value);
-    while (packageURI == null) {
-      sleep(Duration(milliseconds: 10));
-    }
+    Uri? packageURI = Isolate.resolvePackageUriSync(Uri.parse(rootLibrary));
     // ignore: deprecated_member_use
     var rootPath = packageURI!
         .resolve('src/blobs/')
